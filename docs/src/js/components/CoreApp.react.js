@@ -214,6 +214,14 @@ let routes = (
                 }}
             />
             <Route
+                path="rail-sandbox"
+                getComponent={(location, callback) => {
+                    require.ensure([], require => {
+                        callback(null, require('components/ElementsRailSandbox.react'))
+                    }, 'ElementsRailSandbox')
+                }}
+            />
+            <Route
                 path="text-area"
                 getComponent={(location, callback) => {
                     require.ensure([], require => {

@@ -113,6 +113,10 @@ export default class CoreAppNavigation extends React.Component {
                             </li>
 
                             <li>
+                                <Link className="core-app-nav-item" to={{ pathname: '/elements/rail-sandbox' }} activeClassName={isActive}>RailSandbox</Link>
+                            </li>
+
+                            <li>
                                 <Link className="core-app-nav-item" to={{ pathname: '/elements/text-area' }} activeClassName={isActive}>Text Area</Link>
                             </li>
                         </ul>

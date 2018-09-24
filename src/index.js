@@ -18,6 +18,7 @@ export { default as List } from './Elements/List.react.js';
 export { default as Loader } from './Elements/Loader.react.js';
 export { default as Radio } from './Elements/Radio.react.js';
 export { default as Rail } from './Elements/Rail.react.js';
+export { default as RailSandbox } from './Elements/RailSandbox.react.js';
 export { default as TextArea } from './Elements/TextArea.react.js';
 
 // Modules
