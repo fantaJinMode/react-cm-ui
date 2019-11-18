@@ -426,7 +426,14 @@ class PageDemo extends React.PureComponent {
                 addresses,
                 birthDate,
                 churchEntityName,
-                contactPreferences,
+                contactPreferences: {
+                    doNotContact: isDoNotContact,
+                    doNotEmail: isDoNotEmail,
+                    doNotMail: isDoNotMail,
+                    doNotPhone: isDoNotPhone,
+                    doNotText: isDoNotText,
+                    preferredMethod,
+                },
                 deceasedDate,
                 emails,
                 occupations,
@@ -449,7 +456,7 @@ class PageDemo extends React.PureComponent {
         const personAddressInfo = _.find(addresses, 'isPrimary');
         const personOccupationInfo = _.find(occupations, 'isPrimary');
 
-        switch (contactPreferences.preferredMethod) {
+        switch (preferredMethod) {
             case 'email':
                 personPreferredContactMethodText = 'Email';
 
@@ -504,6 +511,11 @@ class PageDemo extends React.PureComponent {
             suffix: suffix || '',
             gender: genderText,
             maritalStatus: maritalStatus || '',
+            isDoNotEmail,
+            isDoNotMail,
+            isDoNotPhone,
+            isDoNotText,
+            isDoNotContact,
         };
 
 
@@ -646,7 +658,7 @@ class PageDemo extends React.PureComponent {
                     accessor: (d) => {
                         const addressInfo = d[`address-${item.id}`];
                         return (
-                            <p className="no-margin-top person-record-address">
+                            <p style={{ margin: 0 }} className="person-record-address">
                                 <span>{addressInfo.address1}</span>
                                 <br />
                                 {addressInfo.address2 && (
@@ -675,6 +687,31 @@ class PageDemo extends React.PureComponent {
             });
         }
 
+        let personDonotContactExpandableRows;
+        if (isDoNotEmail || isDoNotMail || isDoNotPhone || isDoNotText) {
+            personDonotContactExpandableRows = {
+                accessor: (d) => (
+                    <p style={{ margin: 0 }} className="person-record--doNotContactMethod">
+                        {(d.isDoNotEmail || d.isDoNotContact) && (
+                            <span style={{ width: '100%', display: 'inline-block' }}>Email</span>
+                        )}
+                        {(d.isDoNotMail || d.isDoNotContact) && (
+                            <span style={{ width: '100%', display: 'inline-block' }}>Mail</span>
+                        )}
+                        {(d.isDoNotPhone || d.isDoNotContact) && (
+                            <span style={{ width: '100%', display: 'inline-block' }}>Phone</span>
+                        )}
+                        {(d.isDoNotText || d.isDoNotContact) && (
+                            <span style={{ width: '100%', display: 'inline-block' }}>Text</span>
+                        )}
+                    </p>
+                ),
+                fieldName: 'Do Not Contact Via',
+                iconType: 'ban',
+                iconColor: 'warning',
+            };
+        }
+
         const contactColumnInfo = {
             header: 'Contact',
             isExpandable: true,
@@ -691,7 +728,7 @@ class PageDemo extends React.PureComponent {
                 }, {
                     accessor: (d) => (
                         d.addresses ? (
-                            <p className="no-margin-top person-record-address">
+                            <p style={{ margin: 0 }} className="person-record--address">
                                 <span>{d.addresses.address1}</span>
                                 <br />
                                 {d.addresses.address2 && (
@@ -707,6 +744,10 @@ class PageDemo extends React.PureComponent {
                 },
             ],
             expandableSections: [
+                {
+                    header: 'Preferences',
+                    rows: { personDonotContactExpandableRows },
+                },
                 {
                     header: 'Phone',
                     rows: { ...personPhonesExpandableRows },
@@ -1040,7 +1081,7 @@ class PageDemo extends React.PureComponent {
                                     })}
                                 />
                             ) : (
-                                <Page.DataCards
+                                    <Page.DataCards
                                         cardProps={() => ({
                                             onClick: this.onCardClick,
                                         })}
@@ -1080,7 +1121,7 @@ class PageDemo extends React.PureComponent {
                                             },
                                         ]}
                                     />
-                            )}
+                                )}
 
                             <Page.DataGroups
                                 columns={mainCoulumn}
